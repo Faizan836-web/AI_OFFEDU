@@ -49,26 +49,6 @@ function Login() {
       </div>
 
       {/* =====================================================
-          BACK BUTTON
-      ====================================================== */}
-      <div className="absolute left-4 top-4 z-20 sm:left-6 sm:top-6">
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-slate-400 backdrop-blur-xl transition hover:bg-white/[0.06] hover:text-white"
-        >
-          <ArrowLeft size={17} />
-
-          <span className="hidden sm:inline">
-            Back to OFFSEDU
-          </span>
-
-          <span className="sm:hidden">
-            Back
-          </span>
-        </Link>
-      </div>
-
-      {/* =====================================================
           MAIN
       ====================================================== */}
       <div className="relative flex min-h-screen items-center justify-center px-4 py-20 sm:px-6">
