@@ -406,6 +406,10 @@ function Documents() {
       ),
     );
 
+    window.dispatchEvent(
+      new Event("offedu-documents-updated"),
+    );
+
     setSelectedFile(null);
     setShowUpload(false);
 

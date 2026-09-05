@@ -235,9 +235,7 @@ function Home() {
     const loadHistory = () => {
       try {
         const storedSubjects =
-          sessionStorage.getItem(
-            "offsedu_subjects",
-          );
+          localStorage.getItem("offsedu_subjects");
 
         if (!storedSubjects) {
           setHistory([]);
