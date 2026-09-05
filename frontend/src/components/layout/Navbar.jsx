@@ -12,6 +12,7 @@ import {
   UserPlus,
   X,
 } from "lucide-react";
+import logo from "./logo.png";
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 

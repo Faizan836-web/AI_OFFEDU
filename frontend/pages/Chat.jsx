@@ -18,7 +18,9 @@ import {
   User,
   X,
 } from "lucide-react";
+import logo from "./logo.png";
 import { useEffect, useRef, useState } from "react";
+import liveChatbot from "./Live chatbot.svg";
 
 const initialMessages = [
   {
@@ -466,11 +468,20 @@ function Chat() {
               onClick={() => setShowHistory(true)}
               className="rounded-xl border border-white/[0.07] bg-white/[0.035] p-2 text-slate-300 transition hover:border-teal-300/20 hover:bg-teal-400/[0.05] hover:text-teal-200 lg:hidden"
             >
-              <Menu size={17} />
+              <img
+                src={logo}
+                alt="Open menu"
+                className="h-7 w-7 object-contain"
+              />
             </button>
 
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-teal-300/15 bg-teal-400/[0.06]">
-              <Bot size={18} className="text-teal-300" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-teal-300/15 bg-teal-400/[0.06] overflow-hidden">
+              <img
+                src={liveChatbot}
+                alt="Gemma"
+                className="h-[150%] w-[150%] object-contain"
+
+              />
             </div>
 
             <div>
@@ -516,11 +527,11 @@ function Chat() {
                 <div className="relative mb-5">
                   <div className="absolute -inset-5 rounded-full bg-teal-400/[0.06] blur-2xl" />
 
-                  <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl border border-teal-300/15 bg-[#07181a]/90 shadow-[0_0_50px_rgba(20,184,166,0.08)]">
-                    <Bot
-                      size={29}
-                      strokeWidth={1.5}
-                      className="text-teal-200"
+                  <div className="relative flex h-25 w-25 items-center justify-center rounded-2xl border border-teal-300/15 bg-[#07181a]/90 shadow-[0_0_50px_rgba(20,184,166,0.08)] overflow-hidden">
+                    <img
+                      src={liveChatbot}
+                      alt="Gemma"
+                      className="h-full w-full object-contain"
                     />
                   </div>
                 </div>
@@ -529,10 +540,6 @@ function Chat() {
                   Ask Gemma
                 </h2>
 
-                <p className="mt-2 max-w-md text-xs leading-6 text-slate-400">
-                  Ask questions, understand difficult concepts, or use
-                  your study material to learn with your local AI.
-                </p>
               </div>
             )}
 
@@ -545,8 +552,12 @@ function Chat() {
 
             {isTyping && (
               <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-teal-300/15 bg-teal-400/[0.06]">
-                  <Bot size={17} className="text-teal-300" />
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-teal-300/15 bg-teal-400/[0.06] overflow-hidden">
+                  <img
+                    src={liveChatbot}
+                    alt="Gemma"
+                    className="h-full w-full object-contain"
+                  />
                 </div>
 
                 <div className="rounded-2xl rounded-tl-md border border-teal-100/[0.08] bg-[#071416]/80 px-4 py-3 backdrop-blur-xl">
@@ -724,9 +735,10 @@ function ChatMessage({ message }) {
             className="text-slate-300"
           />
         ) : (
-          <Bot
-            size={17}
-            className="text-teal-300"
+          <img
+            src={liveChatbot}
+            alt="Gemma"
+            className="h-full w-full object-contain"
           />
         )}
       </div>

@@ -12,6 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import logo from "./logo.png";
 
 const navigationItems = [
   {
@@ -85,18 +86,26 @@ function Sidebar({
               className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.06] text-white transition hover:bg-white/[0.1]"
               title="Expand sidebar"
             >
-              <Sparkles size={20} />
+              <img
+                src={logo}
+                alt="OFFSEDU"
+                className="h-10 w-10 object-contain"
+              />
             </button>
           ) : (
             <>
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.07] text-white">
-                  <Sparkles size={20} />
+                  <img
+                    src={logo}
+                    alt="OFFSEDU"
+                    className="h-10 w-10 object-contain"
+                  />
                 </div>
 
                 <div>
                   <h1 className="text-base font-semibold tracking-wide text-white">
-                    OFFSEDU
+                    OFFEDU
                   </h1>
 
                   <p className="text-[10px] uppercase tracking-widest text-slate-500">
@@ -242,7 +251,11 @@ function Sidebar({
         <div className="flex h-20 shrink-0 items-center justify-between border-b border-white/10 px-5">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.07] text-white">
-              <Sparkles size={20} />
+              <img
+                src={logo}
+                alt="OFFSEDU"
+                className="h-10 w-10 object-contain"
+              />
             </div>
 
             <div>
