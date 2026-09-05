@@ -515,9 +515,9 @@ function Home() {
               </div>
 
               <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-[#f1f5f2] sm:text-5xl lg:text-6xl">
-                Your Study.
+                Think Smart
                 <span className="mt-1 block bg-gradient-to-r from-[#b7d0c5] via-[#8fb8a8] to-[#6f8f83] bg-clip-text text-transparent">
-                  Reimagined.
+                  Stay Offline...
                 </span>
               </h1>
 

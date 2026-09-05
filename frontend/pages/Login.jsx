@@ -1,6 +1,15 @@
 import { useState } from "react";
-import { ArrowLeft, Eye, EyeOff, LockKeyhole, Mail, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  Eye,
+  EyeOff,
+  LockKeyhole,
+  Mail,
+  ShieldCheck,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+
+import offeduLogo from "./logo.png";
 
 function Login() {
   const navigate = useNavigate();
@@ -12,14 +21,25 @@ function Login() {
   const handleLogin = (event) => {
     event.preventDefault();
 
-    alert(
-      "Login functionality will be connected to the OFFSEDU backend later.",
-    );
+    /*
+      Frontend-only login for now.
+      Backend authentication will be connected later.
+    */
+
+    sessionStorage.setItem("offedu_logged_in", "true");
+
+    if (email.trim()) {
+      sessionStorage.setItem("offedu_user_email", email.trim());
+    }
+
+    navigate("/home");
   };
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#063b3b] via-[#06272d] to-[#03070b] text-slate-100">
-      {/* Background */}
+      {/* =====================================================
+          BACKGROUND
+      ====================================================== */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -left-32 -top-32 h-[450px] w-[450px] rounded-full bg-teal-500/10 blur-3xl" />
 
@@ -28,28 +48,50 @@ function Login() {
         <div className="absolute bottom-[-200px] left-1/3 h-[450px] w-[450px] rounded-full bg-teal-400/5 blur-3xl" />
       </div>
 
-      {/* Back */}
+      {/* =====================================================
+          BACK BUTTON
+      ====================================================== */}
       <div className="absolute left-4 top-4 z-20 sm:left-6 sm:top-6">
         <Link
           to="/"
           className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-black/20 px-3 py-2 text-sm text-slate-400 backdrop-blur-xl transition hover:bg-white/[0.06] hover:text-white"
         >
           <ArrowLeft size={17} />
-          <span className="hidden sm:inline">Back to OFFSEDU</span>
-          <span className="sm:hidden">Back</span>
+
+          <span className="hidden sm:inline">
+            Back to OFFSEDU
+          </span>
+
+          <span className="sm:hidden">
+            Back
+          </span>
         </Link>
       </div>
 
-      {/* Main */}
+      {/* =====================================================
+          MAIN
+      ====================================================== */}
       <div className="relative flex min-h-screen items-center justify-center px-4 py-20 sm:px-6">
         <div className="w-full max-w-md">
-          {/* Logo */}
+
+          {/* =================================================
+              LOGO
+          ================================================== */}
           <div className="mb-7 text-center">
-            <Link to="/" className="inline-flex items-center gap-2">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-teal-300/20 bg-teal-400/10">
-                <span className="text-xl font-bold text-teal-300">O</span>
+            <Link
+              to="/"
+              className="group inline-flex items-center gap-3"
+            >
+              {/* Actual OFFEDU Logo */}
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] shadow-[0_10px_35px_rgba(0,0,0,0.25)]">
+                <img
+                  src={offeduLogo}
+                  alt="OFFEDU Logo"
+                  className="h-full w-full object-contain p-1 transition duration-300 group-hover:scale-105"
+                />
               </div>
 
+              {/* Brand */}
               <span className="text-2xl font-semibold tracking-tight text-white">
                 OFFSEDU
               </span>
@@ -60,8 +102,11 @@ function Login() {
             </p>
           </div>
 
-          {/* Card */}
+          {/* =================================================
+              LOGIN CARD
+          ================================================== */}
           <div className="rounded-3xl border border-white/10 bg-[#061214]/75 p-6 shadow-2xl shadow-black/20 backdrop-blur-2xl sm:p-8">
+
             {/* Header */}
             <div className="mb-7">
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-teal-300/10 bg-teal-400/10 text-teal-300">
@@ -77,7 +122,13 @@ function Login() {
               </p>
             </div>
 
-            <form onSubmit={handleLogin} className="space-y-5">
+            {/* =================================================
+                FORM
+            ================================================== */}
+            <form
+              onSubmit={handleLogin}
+              className="space-y-5"
+            >
               {/* Email */}
               <div>
                 <label
@@ -97,7 +148,9 @@ function Login() {
                     id="login-email"
                     type="email"
                     value={email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    onChange={(event) =>
+                      setEmail(event.target.value)
+                    }
                     placeholder="you@example.com"
                     required
                     className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-4 text-sm text-white outline-none placeholder:text-slate-700 transition focus:border-teal-400/30 focus:bg-black/30"
@@ -118,7 +171,9 @@ function Login() {
                   <button
                     type="button"
                     onClick={() =>
-                      alert("Password recovery will be connected later.")
+                      alert(
+                        "Password recovery will be connected later.",
+                      )
                     }
                     className="text-xs text-teal-400 transition hover:text-teal-300"
                   >
@@ -134,9 +189,15 @@ function Login() {
 
                   <input
                     id="login-password"
-                    type={showPassword ? "text" : "password"}
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
                     value={password}
-                    onChange={(event) => setPassword(event.target.value)}
+                    onChange={(event) =>
+                      setPassword(event.target.value)
+                    }
                     placeholder="Enter your password"
                     required
                     className="w-full rounded-xl border border-white/10 bg-black/20 py-3 pl-10 pr-11 text-sm text-white outline-none placeholder:text-slate-700 transition focus:border-teal-400/30 focus:bg-black/30"
@@ -145,9 +206,15 @@ function Login() {
                   <button
                     type="button"
                     aria-label={
-                      showPassword ? "Hide password" : "Show password"
+                      showPassword
+                        ? "Hide password"
+                        : "Show password"
                     }
-                    onClick={() => setShowPassword((current) => !current)}
+                    onClick={() =>
+                      setShowPassword(
+                        (current) => !current,
+                      )
+                    }
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 transition hover:text-slate-300"
                   >
                     {showPassword ? (
@@ -165,6 +232,7 @@ function Login() {
                   type="checkbox"
                   className="h-4 w-4 rounded border-white/10 bg-black/20 accent-teal-400"
                 />
+
                 Remember me
               </label>
 
@@ -177,16 +245,22 @@ function Login() {
               </button>
             </form>
 
-            {/* Divider */}
+            {/* =================================================
+                DIVIDER
+            ================================================== */}
             <div className="my-6 flex items-center gap-3">
               <div className="h-px flex-1 bg-white/[0.06]" />
 
-              <span className="text-xs text-slate-700">OR</span>
+              <span className="text-xs text-slate-700">
+                OR
+              </span>
 
               <div className="h-px flex-1 bg-white/[0.06]" />
             </div>
 
-            {/* Sign In */}
+            {/* =================================================
+                SIGN IN
+            ================================================== */}
             <div className="text-center">
               <p className="text-sm text-slate-500">
                 Don't have an account?
@@ -194,14 +268,18 @@ function Login() {
 
               <button
                 type="button"
-                onClick={() => navigate("/signin")}
+                onClick={() =>
+                  navigate("/signin")
+                }
                 className="mt-2 text-sm font-medium text-teal-400 transition hover:text-teal-300"
               >
                 Create an account
               </button>
             </div>
 
-            {/* Privacy */}
+            {/* =================================================
+                PRIVACY
+            ================================================== */}
             <div className="mt-7 flex items-start gap-3 rounded-2xl border border-teal-300/10 bg-teal-400/[0.03] p-4">
               <ShieldCheck
                 size={18}
@@ -209,16 +287,20 @@ function Login() {
               />
 
               <p className="text-xs leading-5 text-slate-600">
-                OFFSEDU is designed with a local-first approach. Your AI
-                experience can run locally when the backend and local AI engine
-                are connected.
+                OFFSEDU is designed with a local-first
+                approach. Your AI experience can run
+                locally when the backend and local AI
+                engine are connected.
               </p>
             </div>
           </div>
 
-          {/* Footer */}
+          {/* =================================================
+              FOOTER
+          ================================================== */}
           <p className="mt-6 text-center text-xs text-slate-700">
-            © 2026 OFFSEDU · Local · Private · AI-powered learning
+            © 2026 OFFSEDU · Local · Private · AI-powered
+            learning
           </p>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   BookOpen,
   Check,
@@ -92,6 +93,10 @@ function TestPaper() {
 
   const [generated, setGenerated] = useState(false);
 
+  // Question Paper / Answer Key
+  const [viewMode, setViewMode] =
+    useState("question-paper");
+
   const handleFile = (selectedFile) => {
     if (!selectedFile) {
       return;
@@ -149,20 +154,26 @@ function TestPaper() {
       !subject.trim()
     ) {
       alert(
-        "Please enter a subject/topic or upload study material.",
+        "Please enter a subject/topic or add a reference.",
       );
       return;
     }
 
+    setViewMode("question-paper");
     setGenerated(true);
   };
 
   const generateAnother = () => {
     setGenerated(false);
+    setViewMode("question-paper");
   };
 
-  const printAnswers = () => {
-    window.print();
+  const printQuestionPaper = () => {
+    setViewMode("question-paper");
+
+    setTimeout(() => {
+      window.print();
+    }, 100);
   };
 
   const totalMarks =
@@ -217,197 +228,407 @@ function TestPaper() {
   const questions = createQuestions();
 
   /* =========================
-     GENERATED ANSWER KEY
+     GENERATED PAPER
   ========================= */
 
   if (generated) {
     return (
-      <div className="relative min-h-[calc(100vh-80px)] overflow-hidden px-4 py-7 sm:px-6 lg:px-8">
-        {/* Teal atmosphere */}
-        <div className="pointer-events-none absolute inset-0">
-          <div
-            className="absolute left-[5%] top-[5%] h-[430px] w-[430px] rounded-full blur-[150px]"
-            style={{
-              background:
-                "rgba(13,148,136,0.07)",
-            }}
-          />
+      <>
+        <style>
+          {`
+            @media print {
+              body * {
+                visibility: hidden !important;
+              }
+
+              #question-paper-print,
+              #question-paper-print * {
+                visibility: visible !important;
+              }
+
+              #question-paper-print {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                background: white !important;
+                color: black !important;
+                padding: 30px !important;
+              }
+
+              #question-paper-print .print-hidden {
+                display: none !important;
+              }
+
+              #question-paper-print .print-question {
+                color: black !important;
+                background: white !important;
+                border-color: #d1d5db !important;
+                box-shadow: none !important;
+              }
+
+              #question-paper-print .print-muted {
+                color: #374151 !important;
+              }
+
+              #question-paper-print .print-number {
+                color: black !important;
+                background: white !important;
+                border-color: #9ca3af !important;
+              }
+
+              #question-paper-print .print-badge {
+                color: #111827 !important;
+                background: white !important;
+                border-color: #9ca3af !important;
+              }
+            }
+          `}
+        </style>
+
+        <div className="relative min-h-[calc(100vh-80px)] overflow-hidden px-4 py-7 sm:px-6 lg:px-8">
+          {/* Teal atmosphere */}
+          <div className="pointer-events-none absolute inset-0">
+            <div
+              className="absolute left-[5%] top-[5%] h-[430px] w-[430px] rounded-full blur-[150px]"
+              style={{
+                background:
+                  "rgba(13,148,136,0.07)",
+              }}
+            />
+
+            <div
+              className="absolute right-[5%] top-[35%] h-[400px] w-[400px] rounded-full blur-[150px]"
+              style={{
+                background:
+                  "rgba(20,184,166,0.045)",
+              }}
+            />
+
+            <div
+              className="absolute bottom-[5%] left-[35%] h-[300px] w-[300px] rounded-full blur-[130px]"
+              style={{
+                background:
+                  "rgba(8,145,178,0.035)",
+              }}
+            />
+          </div>
 
           <div
-            className="absolute right-[5%] top-[35%] h-[400px] w-[400px] rounded-full blur-[150px]"
-            style={{
-              background:
-                "rgba(20,184,166,0.045)",
-            }}
-          />
+            id="question-paper-print"
+            className="relative z-10 mx-auto max-w-5xl"
+          >
+            {/* Header */}
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="mb-2 flex items-center gap-2 text-[9px] uppercase tracking-[0.18em] text-teal-300">
+                  <Sparkles size={13} />
 
-          <div
-            className="absolute bottom-[5%] left-[35%] h-[300px] w-[300px] rounded-full blur-[130px]"
-            style={{
-              background:
-                "rgba(8,145,178,0.035)",
-            }}
-          />
-        </div>
+                  {viewMode === "question-paper"
+                    ? "Generated Question Paper"
+                    : "Generated Answer Key"}
+                </div>
 
-        <div className="relative z-10 mx-auto max-w-5xl">
-          {/* Header */}
-          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <div className="mb-2 flex items-center gap-2 text-[9px] uppercase tracking-[0.18em] text-teal-300">
-                <Sparkles size={13} />
-                Generated Answer Key
+                <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                  {subject ||
+                    "Generated Test Paper"}
+                </h1>
+
+                {topic && (
+                  <p className="mt-1 text-xs text-slate-500">
+                    Topic: {topic}
+                  </p>
+                )}
               </div>
 
-              <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
-                {subject ||
-                  "Generated Test Paper"}
-              </h1>
+              <div className="print-hidden flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={generateAnother}
+                  className="flex items-center gap-2 rounded-xl border border-teal-100/[0.08] bg-white/[0.025] px-4 py-2.5 text-[10px] text-slate-400 transition hover:border-teal-300/15 hover:bg-teal-400/[0.04] hover:text-teal-200"
+                >
+                  <Sparkles size={14} />
+                  Generate Another
+                </button>
 
-              {topic && (
-                <p className="mt-1 text-xs text-slate-500">
-                  Topic: {topic}
-                </p>
-              )}
+                {viewMode ===
+                  "question-paper" && (
+                  <button
+                    type="button"
+                    onClick={printQuestionPaper}
+                    className="flex items-center gap-2 rounded-xl border border-teal-300/20 bg-teal-400/[0.08] px-4 py-2.5 text-[10px] font-semibold text-teal-100 transition hover:bg-teal-400/[0.13]"
+                  >
+                    <Printer size={14} />
+                    Print Question Paper
+                  </button>
+                )}
+              </div>
             </div>
 
-            <div className="flex flex-wrap gap-2">
+            {/* Paper / Answer Toggle */}
+            <div className="print-hidden mb-6 flex rounded-xl border border-teal-100/[0.08] bg-white/[0.02] p-1">
               <button
                 type="button"
-                onClick={generateAnother}
-                className="flex items-center gap-2 rounded-xl border border-teal-100/[0.08] bg-white/[0.025] px-4 py-2.5 text-[10px] text-slate-400 transition hover:border-teal-300/15 hover:bg-teal-400/[0.04] hover:text-teal-200"
+                onClick={() =>
+                  setViewMode("question-paper")
+                }
+                className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-[10px] font-medium transition ${
+                  viewMode === "question-paper"
+                    ? "bg-teal-400/[0.09] text-teal-100 ring-1 ring-teal-300/10"
+                    : "text-slate-500 hover:bg-white/[0.025] hover:text-slate-300"
+                }`}
               >
-                <Sparkles size={14} />
-                Generate Another
+                <FileText size={14} />
+                Question Paper
               </button>
 
               <button
                 type="button"
-                onClick={printAnswers}
-                className="flex items-center gap-2 rounded-xl border border-teal-300/20 bg-teal-400/[0.08] px-4 py-2.5 text-[10px] font-semibold text-teal-100 transition hover:bg-teal-400/[0.13]"
+                onClick={() =>
+                  setViewMode("answer-key")
+                }
+                className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-[10px] font-medium transition ${
+                  viewMode === "answer-key"
+                    ? "bg-teal-400/[0.09] text-teal-100 ring-1 ring-teal-300/10"
+                    : "text-slate-500 hover:bg-white/[0.025] hover:text-slate-300"
+                }`}
               >
-                <Printer size={14} />
-                Print Answers
+                <Check size={14} />
+                Answer Key
               </button>
             </div>
-          </div>
 
-          {/* Paper Info */}
-          <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            <InfoCard
-              label="Question Type"
-              value={questionType}
-            />
-
-            <InfoCard
-              label="Marks / Question"
-              value={marks}
-            />
-
-            <InfoCard
-              label="Questions"
-              value={questionCount}
-            />
-
-            <InfoCard
-              label="Total Marks"
-              value={totalMarks}
-              highlight
-            />
-
-            <InfoCard
-              label="Material"
-              value={
-                file ? file.name : "Topic based"
-              }
-            />
-          </div>
-
-          {/* Questions */}
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <BookOpen
-                size={17}
-                className="text-teal-300"
+            {/* Paper Info */}
+            <div className="mb-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              <InfoCard
+                label="Question Type"
+                value={questionType}
               />
 
-              <h2 className="text-sm font-semibold text-white">
-                Questions + Answers
-              </h2>
+              <InfoCard
+                label="Marks / Question"
+                value={marks}
+              />
+
+              <InfoCard
+                label="Questions"
+                value={questionCount}
+              />
+
+              <InfoCard
+                label="Total Marks"
+                value={totalMarks}
+                highlight
+              />
+
+              <InfoCard
+                label="Reference"
+                value={
+                  file
+                    ? file.name
+                    : "Topic based"
+                }
+              />
             </div>
 
-            {questions.map((item, index) => (
-              <div
-                key={`${item.question}-${index}`}
-                className="rounded-2xl border border-teal-100/[0.08] bg-[#061214]/65 p-5 shadow-[0_15px_45px_rgba(0,0,0,0.16)] backdrop-blur-2xl sm:p-6"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-teal-300/15 bg-teal-400/[0.05] text-xs font-semibold text-teal-200">
-                    {index + 1}
+            {/* =========================
+                QUESTION PAPER
+            ========================= */}
+
+            {viewMode === "question-paper" && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <BookOpen
+                    size={17}
+                    className="text-teal-300"
+                  />
+
+                  <h2 className="text-sm font-semibold text-white">
+                    Question Paper
+                  </h2>
+                </div>
+
+                {/* Print Header */}
+                <div className="hidden border-b border-gray-300 pb-5 print:block">
+                  <div className="text-center">
+                    <h2 className="text-2xl font-bold text-black">
+                      {subject ||
+                        "Generated Test Paper"}
+                    </h2>
+
+                    {topic && (
+                      <p className="mt-1 text-sm text-gray-700">
+                        Topic: {topic}
+                      </p>
+                    )}
                   </div>
 
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-full border border-teal-300/10 bg-teal-400/[0.035] px-2.5 py-1 text-[9px] text-teal-200/70">
-                        {item.type}
-                      </span>
-
-                      <span className="rounded-full border border-white/[0.07] bg-white/[0.02] px-2.5 py-1 text-[9px] text-slate-500">
-                        {marks}{" "}
-                        {Number(marks) === 1
-                          ? "Mark"
-                          : "Marks"}
-                      </span>
+                  <div className="mt-5 grid grid-cols-4 gap-3 text-sm text-black">
+                    <div>
+                      <strong>Question Type:</strong>{" "}
+                      {questionType}
                     </div>
 
-                    <h3 className="mt-3 text-sm font-semibold leading-6 text-white">
-                      {item.question}
-                    </h3>
+                    <div>
+                      <strong>Questions:</strong>{" "}
+                      {questionCount}
+                    </div>
 
-                    <div className="mt-4 rounded-xl border border-teal-300/10 bg-black/20 p-4">
-                      <div className="mb-2 flex items-center gap-2">
-                        <Check
-                          size={14}
-                          className="text-teal-300/70"
-                        />
+                    <div>
+                      <strong>Marks:</strong>{" "}
+                      {marks} each
+                    </div>
 
-                        <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-teal-200/50">
-                          Reference Answer
-                        </span>
-                      </div>
-
-                      <p className="text-xs leading-6 text-slate-400 sm:text-sm">
-                        {item.answer}
-                      </p>
+                    <div>
+                      <strong>Total:</strong>{" "}
+                      {totalMarks}
                     </div>
                   </div>
                 </div>
+
+                {questions.map((item, index) => (
+                  <div
+                    key={`${item.question}-${index}`}
+                    className="print-question rounded-2xl border border-teal-100/[0.08] bg-[#061214]/65 p-5 shadow-[0_15px_45px_rgba(0,0,0,0.16)] backdrop-blur-2xl sm:p-6"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="print-number flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-teal-300/15 bg-teal-400/[0.05] text-xs font-semibold text-teal-200">
+                        {index + 1}
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="print-badge rounded-full border border-teal-300/10 bg-teal-400/[0.035] px-2.5 py-1 text-[9px] text-teal-200/70">
+                            {item.type}
+                          </span>
+
+                          <span className="print-badge rounded-full border border-white/[0.07] bg-white/[0.02] px-2.5 py-1 text-[9px] text-slate-500">
+                            {marks}{" "}
+                            {Number(marks) === 1
+                              ? "Mark"
+                              : "Marks"}
+                          </span>
+                        </div>
+
+                        <h3 className="mt-3 text-sm font-semibold leading-6 text-white print:text-black">
+                          {item.question}
+                        </h3>
+
+                        {/* Answer writing space */}
+                        <div className="mt-5 hidden print:block">
+                          {item.type ===
+                          "Long Answer" ? (
+                            <>
+                              <div className="mb-4 border-b border-gray-300" />
+                              <div className="mb-4 border-b border-gray-300" />
+                              <div className="mb-4 border-b border-gray-300" />
+                              <div className="mb-4 border-b border-gray-300" />
+                            </>
+                          ) : (
+                            <>
+                              <div className="mb-4 border-b border-gray-300" />
+                              <div className="mb-4 border-b border-gray-300" />
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
 
-          {/* Footer Notice */}
-          <div className="mt-6 flex items-start gap-3 rounded-2xl border border-teal-100/[0.07] bg-teal-400/[0.025] p-4">
-            <Sparkles
-              size={15}
-              className="mt-0.5 shrink-0 text-teal-300/60"
-            />
+            {/* =========================
+                ANSWER KEY
+            ========================= */}
 
-            <div>
-              <p className="text-[10px] font-medium text-teal-200/60">
-                AI Answer Key
-              </p>
+            {viewMode === "answer-key" && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Check
+                    size={17}
+                    className="text-teal-300"
+                  />
 
-              <p className="mt-1 text-[10px] leading-5 text-slate-600">
-                These are frontend demo questions.
-                Gemma will generate questions and
-                reference answers after backend
-                integration.
-              </p>
+                  <h2 className="text-sm font-semibold text-white">
+                    Answer Key
+                  </h2>
+                </div>
+
+                {questions.map((item, index) => (
+                  <div
+                    key={`answer-${item.question}-${index}`}
+                    className="rounded-2xl border border-teal-100/[0.08] bg-[#061214]/65 p-5 shadow-[0_15px_45px_rgba(0,0,0,0.16)] backdrop-blur-2xl sm:p-6"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-teal-300/15 bg-teal-400/[0.05] text-xs font-semibold text-teal-200">
+                        {index + 1}
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="rounded-full border border-teal-300/10 bg-teal-400/[0.035] px-2.5 py-1 text-[9px] text-teal-200/70">
+                            {item.type}
+                          </span>
+
+                          <span className="rounded-full border border-white/[0.07] bg-white/[0.02] px-2.5 py-1 text-[9px] text-slate-500">
+                            {marks}{" "}
+                            {Number(marks) === 1
+                              ? "Mark"
+                              : "Marks"}
+                          </span>
+                        </div>
+
+                        <h3 className="mt-3 text-sm font-semibold leading-6 text-white">
+                          {item.question}
+                        </h3>
+
+                        <div className="mt-4 rounded-xl border border-teal-300/10 bg-black/20 p-4">
+                          <div className="mb-2 flex items-center gap-2">
+                            <Check
+                              size={14}
+                              className="text-teal-300/70"
+                            />
+
+                            <span className="text-[9px] font-semibold uppercase tracking-[0.15em] text-teal-200/50">
+                              Reference Answer
+                            </span>
+                          </div>
+
+                          <p className="text-xs leading-6 text-slate-400 sm:text-sm">
+                            {item.answer}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Footer Notice */}
+            <div className="print-hidden mt-6 flex items-start gap-3 rounded-2xl border border-teal-100/[0.07] bg-teal-400/[0.025] p-4">
+              <Sparkles
+                size={15}
+                className="mt-0.5 shrink-0 text-teal-300/60"
+              />
+
+              <div>
+                <p className="text-[10px] font-medium text-teal-200/60">
+                  AI Answer Key
+                </p>
+
+                <p className="mt-1 text-[10px] leading-5 text-slate-600">
+                  These are frontend demo questions.
+                  Gemma will generate questions and
+                  reference answers after backend
+                  integration.
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -461,8 +682,8 @@ function TestPaper() {
               </h1>
 
               <p className="mt-1 max-w-xl text-xs leading-5 text-slate-500 sm:text-sm">
-                Generate short and long answer
-                questions with reference answers.
+                Generate separate question papers
+                and reference answer keys.
               </p>
             </div>
           </div>
@@ -637,11 +858,11 @@ function TestPaper() {
               className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-teal-300/20 bg-teal-400/[0.08] px-5 py-3.5 text-xs font-semibold text-teal-100 transition hover:border-teal-300/30 hover:bg-teal-400/[0.13]"
             >
               <Zap size={16} />
-              Generate Answer Key
+              Generate Test Paper
             </button>
           </div>
 
-          {/* Upload */}
+          {/* Reference */}
           <div className="rounded-2xl border border-teal-100/[0.08] bg-[#061214]/65 p-5 shadow-[0_15px_50px_rgba(0,0,0,0.18)] backdrop-blur-2xl sm:p-6">
             <div className="mb-5">
               <div className="flex items-center gap-2">
@@ -651,12 +872,12 @@ function TestPaper() {
                 />
 
                 <h2 className="text-sm font-semibold text-white">
-                  Study Material
+                  Reference
                 </h2>
               </div>
 
               <p className="mt-1 text-[10px] leading-5 text-slate-600">
-                Upload notes or study material to
+                Add notes or reference material to
                 generate relevant questions.
               </p>
             </div>
@@ -696,7 +917,7 @@ function TestPaper() {
                 </div>
 
                 <p className="text-xs font-medium text-slate-300">
-                  Drop your file here
+                  Add your reference
                 </p>
 
                 <p className="mt-1 text-[10px] text-slate-600">
@@ -736,7 +957,7 @@ function TestPaper() {
                     type="button"
                     onClick={() => setFile(null)}
                     className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-500 transition hover:bg-white/[0.06] hover:text-white"
-                    title="Remove file"
+                    title="Remove reference"
                   >
                     <X size={16} />
                   </button>
@@ -758,8 +979,8 @@ function TestPaper() {
                   </p>
 
                   <p className="mt-1 text-[10px] leading-5 text-slate-600">
-                    Upload your material or enter a
-                    topic. Gemma will later generate
+                    Add a reference or enter a topic.
+                    Gemma will later generate
                     questions and reference answers
                     based on your selected configuration.
                   </p>

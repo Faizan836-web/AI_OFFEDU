@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import MainLayout from "./components/layout/MainLayout";
 
@@ -21,9 +21,16 @@ import SignIn from "../pages/Signin";
 function App() {
   return (
     <Routes>
+      {/* Login */}
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+
+      {/* Sign In */}
+      <Route path="/signin" element={<SignIn />} />
+
       {/* Main OFFSEDU Application */}
       <Route element={<MainLayout />}>
-        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/chat" element={<Chat />} />
         <Route path="/explain" element={<Explain />} />
         <Route path="/quiz" element={<Quiz />} />
@@ -35,9 +42,8 @@ function App() {
         <Route path="/settings" element={<Settings />} />
       </Route>
 
-      {/* Authentication Pages */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/signin" element={<SignIn />} />
+      {/* Unknown URL */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
